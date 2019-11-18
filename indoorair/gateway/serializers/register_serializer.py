@@ -17,7 +17,7 @@ class RegisterSerializer(serializers.Serializer):
              UniqueValidator(queryset=User.objects.all())
          ]
     )
-    password = serializers.CharField()
+    password = serializers.CharField(write_only=True)
 
     def create(self, validated_data):
         first_name = validated_data.get('first_name', None)

@@ -9,6 +9,8 @@ from django.contrib.auth.models import User # STEP 1: Import the user
 from django.contrib.auth import authenticate, login, logout
 from rest_framework import views, status, response
 
+from gateway.serializers import RegisterSerializer, LoginSerializer
+
 
 def register_page(request):
     # STEP 2 - Do something w/ models.
@@ -53,37 +55,21 @@ class RegisterAPI(views.APIView):
             data=serializer.data,
         )
 
-def post_login_api(request):
-    username = request.POST.get("username")
-    password = request.POST.get("password")
 
-    print("For debugging purposes", username, password)
 
-    try:
-        user = authenticate(username=username, password=password)
-        if user:
-            print("PRE-LOGIN", user.get_full_name())
-            login(request, user)
-            print("POST-LOGIN", user.get_full_name())
-
-            # A backend authenticated the credentials
-            return JsonResponse({
-                 "was_logged_in": True,
-                 "reason": None,
-            })
-        else:
-            # No backend authenticated the credentials
-            return JsonResponse({
-                 "was_logged_in": False,
-                 "reason": "Cannot log in, username or password is wrong.",
-            })
-
-    except Exception as e:
-        print(e)
-        return JsonResponse({
-             "was_successful": False,
-             "reason": "Cannot log in, username or password is wrong.",
+class LoginAPI(views.APIView):
+    def post(self, request):
+        serializer = LoginSerializer(data=request.data, context={
+            'request': request,
         })
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return response.Response(
+            status=status.HTTP_200_OK,
+            data={
+                 'details': 'You have been logged in successfully!'
+            },
+        )
 
 
 
