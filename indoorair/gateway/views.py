@@ -7,6 +7,7 @@ from django.shortcuts import render # STEP 1 - Import
 from django.shortcuts import redirect
 from django.contrib.auth.models import User # STEP 1: Import the user
 from django.contrib.auth import authenticate, login, logout
+from rest_framework import views, status, response
 
 
 def register_page(request):
@@ -42,33 +43,15 @@ def login_page(request):
     return render(request, "gateway/login.html", {})
 
 
-def post_register_api(request):
-    first_name = request.POST.get("first_name")
-    last_name = request.POST.get("last_name")
-    email = request.POST.get("email")
-    password = request.POST.get("password")
-    username = request.POST.get("username")
-
-    # This is for debugging purposes only.
-    print(first_name, last_name, username, email, password)
-
-    # STEP 3: Plug in our data from the request into our `User` model.
-    try:
-        user = User.objects.create_user(username, email, password)
-        user.last_name = last_name
-        user.first_name = first_name
-        user.save()
-
-        return JsonResponse({
-             'was_registered': True,
-             'reason': None,
-        })
-    except Exception as e:
-        return JsonResponse({
-             'was_registered': False,
-             'reason': str(e),
-        })
-
+class RegisterAPI(views.APIView):
+    def post(self, request):
+        serializer = RegisterSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return response.Response(
+            status=status.HTTP_201_CREATED,
+            data=serializer.data,
+        )
 
 def post_login_api(request):
     username = request.POST.get("username")
