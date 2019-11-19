@@ -31,13 +31,16 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    # Django Apps
+    # Our Apps
     'homepage.apps.HomepageConfig',
     'gateway.apps.GatewayConfig',
     'foundations.apps.FoundationsConfig',
     'dashboard.apps.DashboardConfig',
     'instrument.apps.InstrumentConfig',
     'userprofile.apps.UserprofileConfig',
+    'report.apps.ReportConfig',
+
+    # Django Apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

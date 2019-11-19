@@ -1,6 +1,4 @@
-function onCreateClick() {
-    window.location.href = "{% url 'i_create_page' %}";
-}
+
 
 function onBackClick() {
     window.location.href = "{% url 'dashboard_page' %}";
