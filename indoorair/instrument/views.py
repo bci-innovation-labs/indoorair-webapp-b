@@ -38,23 +38,23 @@ def get_instruments_list_api(request):
     })
 
 
-def post_instruments_create_api(request):
-    name = request.POST.get("name")
-    print(name)
-    try:
-        instrument = Instrument.objects.create(
-            name=name,
-            user=request.user
-        )
-        print("INSTRUMENT ID", instrument.id)
-        return JsonResponse({
-         'was_created': True,
-        })
-    except Exception as e:
-        return JsonResponse({
-         'was_created': False,
-         'reason': str(e),
-        })
+# def post_instruments_create_api(request):
+#     name = request.POST.get("name")
+#     print(name)
+#     try:
+#         instrument = Instrument.objects.create(
+#             name=name,
+#             user=request.user
+#         )
+#         print("INSTRUMENT ID", instrument.id)
+#         return JsonResponse({
+#          'was_created': True,
+#         })
+#     except Exception as e:
+#         return JsonResponse({
+#          'was_created': False,
+#          'reason': str(e),
+#         })
 
 
 def i_retrieve_page(request, id):
@@ -78,19 +78,16 @@ def i_update_page(request, id):
         "instrument_id": int(id),
     })
 
-def i_update_api(request, id):
-    try:
-        name = request.POST.get("name")
-        instrument = Instrument.objects.get(id=int(id))
-        instrument.name = name
-        instrument.save()
-        return JsonResponse({
-            'was_found': True,
-            'id': instrument.id,
-            'name': instrument.name,
-        })
-    except Exception as e:
-        print(e)
-        return JsonResponse({
-         'was_found': False,
-        })
+
+class InstrumentUpdateAPI(views.APIView):
+    def put(self, request, id):
+        instrument = Instrument.objects.get(id=id)
+        serializer = InstrumentUpdateSerializer(instrument, data=request.data, many=False)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return response.Response(
+            status=status.HTTP_200_OK,
+            data={
+                'Updated instrument'
+            }
+        )
