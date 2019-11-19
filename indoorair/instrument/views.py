@@ -6,6 +6,9 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render # STEP 1 - Import
 from django.shortcuts import redirect
 from foundations.models import Instrument
+from rest_framework import status, response, views
+
+from .serializers import InstrumentRetrieveSerializer
 
 
 def i_list_page(request):
@@ -34,6 +37,7 @@ def get_instruments_list_api(request):
         'instruments': output
     })
 
+
 def post_instruments_create_api(request):
     name = request.POST.get("name")
     print(name)
@@ -58,18 +62,16 @@ def i_retrieve_page(request, id):
         "instrument_id": int(id),
     })
 
-def i_retrieve_api(request, id):
-    try:
+
+class InstrumentRetrieveAPI(views.APIView):
+    def get(self, request, id):
         instrument = Instrument.objects.get(id=int(id))
-        return JsonResponse({
-            'was_found': True,
-            'id': instrument.id,
-            'name': instrument.name,
-        })
-    except Exception as e:
-        return JsonResponse({
-         'was_found': False,
-        })
+        serializer = InstrumentRetrieveSerializer(instrument, many=False)
+        return response.Response(
+            status=status.HTTP_200_OK,
+            data=serializer.data
+        )
+
 
 def i_update_page(request, id):
     return render(request, "instrument/update.html", {

@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -8,6 +9,8 @@ class Instrument(models.Model):
         on_delete=models.CASCADE
     )
     name = models.CharField(max_length=255)
+    location = models.CharField(max_length=127)
+    serial = models.UUIDField(default=uuid.uuid4, editable=False)
 
     def __str__(self):
         return self.name + " " + str(self.user)
