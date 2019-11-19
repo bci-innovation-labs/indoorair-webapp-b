@@ -7,5 +7,5 @@ from . import views
 
 urlpatterns = [
     path('dashboard', views.dashboard_page, name='dashboard_page'),
-    path('api/dashboard', views.get_dashboard_api, name='dashboard_apis'),
+    path('api/dashboard', views.DashboardAPI.as_view(), name='dashboard_apis'),
 ]
