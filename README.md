@@ -1,2 +1,2 @@
-# indoorair-webapp-a
-Midterm assignment - Part A
+# indoorair-webapp-b
+Midterm assignment - Part B
