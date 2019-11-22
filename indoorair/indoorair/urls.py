@@ -24,4 +24,5 @@ urlpatterns = [
     path('', include('instrument.urls')),
     path('', include('userprofile.urls')),
     path('', include('report.urls')),
+    path('', include('sensor.urls')),
 ]

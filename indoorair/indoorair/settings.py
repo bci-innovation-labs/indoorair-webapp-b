@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'instrument.apps.InstrumentConfig',
     'userprofile.apps.UserprofileConfig',
     'report.apps.ReportConfig',
+    'sensor.apps.SensorConfig',
 
     # Django Apps
     'django.contrib.admin',
